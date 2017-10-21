@@ -1,30 +1,30 @@
 'use strict';
 
-export class User {
-  id: string;
+export class UserInfo {
   name: string;
+  points: number;
 
-  constructor(id:string, name: string) {
-    this.id = id;
+  constructor(name: string, points: number) {
     this.name = name;
+    this.points = points;
   }
 }
 
 export class LoggedInUser {
-  token: string;
   name: string;
-
-  constructor(token:string, name: string) {
-    this.token = token;
+  token: string;
+  
+  constructor(name: string, token:string) {
     this.name = name;
+    this.token = token;
   }
 }
 
 export class RegisteredUser {
   name: string;
   password: string;
-
-  constructor(name:string, password: string) {
+  
+  constructor(name: string, password:string) {
     this.name = name;
     this.password = password;
   }

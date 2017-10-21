@@ -1,5 +1,18 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+const WebSocket = require("ws");
+const model_1 = require("./model");
+exports.testLoggedInUsers = [
+    new model_1.LoggedInUser('user11', 'token1'),
+    new model_1.LoggedInUser('user12', 'token2'),
+    new model_1.LoggedInUser('user13', 'token3'),
+    new model_1.LoggedInUser('user14', 'token4'),
+    new model_1.LoggedInUser('user15', 'token5'),
+    new model_1.LoggedInUser('user16', 'token6'),
+    new model_1.LoggedInUser('user17', 'token7'),
+    new model_1.LoggedInUser('user18', 'token8'),
+    new model_1.LoggedInUser('user19', 'token8'),
+];
 // send data to specific client
 function sendJson(ws, data) {
     ws.send(JSON.stringify(data));
@@ -45,4 +58,15 @@ function waitForConnection(socket, callback) {
     }, 100); // wait 100 milisecond for the connection...
 }
 exports.waitForConnection = waitForConnection;
+function tryConnect(socket, addr, callback) {
+    setTimeout(function () {
+        socket = new WebSocket(addr);
+        socket.onerror = function (event) {
+            console.log('Server is down');
+            process.exit(); // end server
+        };
+        waitForConnection(socket, callback);
+    }, 200);
+}
+exports.tryConnect = tryConnect;
 //# sourceMappingURL=basic.js.map

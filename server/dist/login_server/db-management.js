@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const model_1 = require("./model");
+const model_1 = require("../model");
 const mysql = require('mysql');
 const q = require('q'); // promise generator
 class DbManager {
@@ -10,7 +10,7 @@ class DbManager {
             host: 'localhost',
             user: 'root',
             password: 'Pa123sS!',
-            database: 'mahjongdb'
+            database: 'hackisu'
         });
     }
     // get registered users from database
@@ -26,6 +26,26 @@ class DbManager {
         return this.query("SELECT EXISTS(SELECT 1 FROM registered_users WHERE name ='" + name + "' AND password='" + password + "');").then((result) => {
             // transform the result to true or false
             return result[0][Object.keys(result[0])[0]] == 1;
+        });
+    }
+    // check if the user is registered
+    getRegisteredUser(name, password) {
+        return this.query("SELECT * FROM registered_users WHERE name='" + name + "' AND password='" + password + "';").then((result) => {
+            return result[0];
+        });
+    }
+    // get patient info
+    // this should be called only after the login is successful
+    getPatientInfo(name) {
+        return this.query("SELECT * FROM patient_info WHERE name='" + name + "';").then((result) => {
+            return result[0];
+        });
+    }
+    // get doctor info
+    // this should be called only after the login is successful
+    getDrInfo(name) {
+        return this.query("SELECT * FROM dr_info WHERE name='" + name + "';").then((result) => {
+            return result[0];
         });
     }
     // run mysql query and return promise
@@ -48,7 +68,7 @@ class DbManager {
 exports.DbManager = DbManager;
 var dbManager = new DbManager();
 // Manages users, works for login/signup
-class UserManager {
+class LoggedInUserManager {
     constructor() {
         this.loggedInUsers = [];
         this.forbiddenNameRegex = /\s/;
@@ -116,12 +136,12 @@ class UserManager {
         dbManager.checkRegisteredUser(name, password).then((result) => {
             if (result) {
                 let token = this.makeToken();
-                let user = new model_1.LoggedInUser(token, name);
+                let user = new model_1.LoggedInUser(name, token);
                 this.loggedInUsers.push(user);
                 deferred.resolve({
                     action: 'login',
                     status: 'ok',
-                    user_name: name,
+                    username: name,
                     token: token
                 });
             }
@@ -160,5 +180,5 @@ class UserManager {
         return text;
     }
 }
-exports.UserManager = UserManager;
+exports.LoggedInUserManager = LoggedInUserManager;
 //# sourceMappingURL=db-management.js.map

@@ -1,5 +1,22 @@
 'use strict';
 
+import WebSocket = require('ws');
+
+import { LoggedInUser } from "./model";
+import { RegisteredUser } from "./model";
+
+export var testLoggedInUsers: LoggedInUser[] = [
+  new LoggedInUser('user11','token1'),
+  new LoggedInUser('user12','token2'),
+  new LoggedInUser('user13','token3'),
+  new LoggedInUser('user14','token4'),
+  new LoggedInUser('user15','token5'),
+  new LoggedInUser('user16','token6'),
+  new LoggedInUser('user17','token7'),
+  new LoggedInUser('user18','token8'),
+  new LoggedInUser('user19','token8'),
+];
+
 // send data to specific client
 export function sendJson(ws, data): void {
   ws.send(JSON.stringify(data));
@@ -43,4 +60,16 @@ export function waitForConnection(socket, callback){
     }
 
   }, 100); // wait 100 milisecond for the connection...
+}
+
+export function tryConnect(socket, addr, callback){
+  setTimeout( function(){
+    socket = new WebSocket(addr);
+    socket.onerror = function(event){
+      console.log('Server is down');
+      process.exit(); // end server
+    }
+    waitForConnection(socket, callback);
+  }, 200);
+  
 }

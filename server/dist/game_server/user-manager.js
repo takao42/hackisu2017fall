@@ -1,35 +1,26 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const model_1 = require("./model");
+const model_1 = require("../model");
+const basic_1 = require("../basic");
 class UserManager {
     constructor() {
-        let testUsers = [
-            new model_1.LoggedInUser('user1', 'token1'),
-            new model_1.LoggedInUser('user2', 'token2'),
-            new model_1.LoggedInUser('user3', 'token3'),
-            new model_1.LoggedInUser('user4', 'token3'),
-            new model_1.LoggedInUser('user5', 'token3'),
-            new model_1.LoggedInUser('user6', 'token3'),
-            new model_1.LoggedInUser('user7', 'token3'),
-            new model_1.LoggedInUser('user8', 'token3'),
-        ];
-        this.users = testUsers;
+        this.users = basic_1.testLoggedInUsers;
         //this.users = [];
-        this.userNames = [];
+        this.usernames = [];
     }
     // add new user
-    addUserWithToken(userName, token) {
-        if (!this.checkUserToken(userName, token)) {
-            this.users.push(new model_1.LoggedInUser(userName, token));
-            this.userNames.push(userName);
+    addUserWithToken(username, token) {
+        if (!this.checkUserToken(username, token)) {
+            this.users.push(new model_1.LoggedInUser(username, token));
+            this.usernames.push(username);
             return true;
         }
         return false;
     }
     // check if a user with the given token exists
-    checkUserToken(userName, token) {
+    checkUserToken(username, token) {
         for (let i = 0; i < this.users.length; i++) {
-            if (this.users[i].name == userName && this.users[i].token == token) {
+            if (this.users[i].name == username && this.users[i].token == token) {
                 return true;
             }
         }

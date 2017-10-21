@@ -1,9 +1,9 @@
 'use strict';
 
 import WebSocket = require('ws');
-import { Message } from "./model";
-import { User } from "./model";
-import { UserManager } from "./db-management";
+import { Message } from "../model";
+import { LoggedInUserManager } from "./db-management";
+import { sendJson, broadcast, tryParseJson } from "../basic";
 
 // game server websocket
 var ws_gs = new WebSocket('ws://localhost:3001');
@@ -15,29 +15,29 @@ ws_gs.onerror = function(event){
 var port: number = 3002;
 var WebSocketServer = WebSocket.Server;
 var server = new WebSocketServer({ port: port });
-var userManager = new UserManager();
+var userManager = new LoggedInUserManager();
 
 // client connected to server
 server.on('connection', (ws: WebSocket) => {
 
   // message recieved from client
 	ws.on('message', (message: string) => {
-    var msg = JSON.parse(message);
+    var recvData = tryParseJson(message);
 
-    // check if action exists
-    if (!('action' in msg)) {
+    if(recvData == null){
+      // recieved data is broken
       sendJson(ws, {
         action: null, 
         status: 'error', 
-        reason: 'no action'
+        reason: 'broken JSON data'
       });
       return;
     }
 
     // signup request from client
-    if(msg.action == 'signup') {
+    if(recvData.action == 'signup') {
       // check if name and password exist
-      if (!('name' in msg) || !('password' in msg)) {
+      if (!('username' in recvData) || !('password' in recvData)) {
         sendJson(ws, {
           action: 'signup', 
           status: 'error', 
@@ -46,21 +46,20 @@ server.on('connection', (ws: WebSocket) => {
         return;
       }
 
-      userManager.signupUser(msg.name, msg.password).then((result) => {
+      userManager.signupUser(recvData.name, recvData.password).then((result) => {
         if(result.status == 'ok'){
           sendJson(ws, result);
-          console.log('ls: \''+msg.name+'\' registered');
+          console.log('ls: \''+recvData.name+'\' registered');
         } else {
           sendJson(ws, result);
         }
       });
     
     }
-
     // login request from client
-    else if(msg.action == 'login'){
+    else if(recvData.action == 'login'){
       // check if name and password keys exist
-      if (!('name' in msg) || !('password' in msg)) {
+      if (!('username' in recvData) || !('password' in recvData)) {
         sendJson(ws, {
           action: 'login', 
           status: 'error', 
@@ -69,15 +68,15 @@ server.on('connection', (ws: WebSocket) => {
         return;
       }
 
-      userManager.loginUser(msg.name, msg.password).then((result) => {
+      userManager.loginUser(recvData.username, recvData.password).then((result) => {
         if(result.status == 'ok'){
           let resultToServer = result;
-          resultToServer['server_token'] = 'j87s98dhfsa0shds0sfsh';
+          resultToServer['servertoken'] = 'j87s98dhfsa0shds0sfsh';
           // send result to game server
           sendJson(ws_gs, result);
           // send result back to client
           sendJson(ws, result);
-          console.log('ls: \''+result.user_name+'\' logged in');
+          console.log('ls: \''+result.username+'\' logged in');
         } else { 
           sendJson(ws, result);
         }
@@ -85,17 +84,11 @@ server.on('connection', (ws: WebSocket) => {
     }
 	});
 
-
   // client disconnected
   ws.on('disconnect', () => {
       console.log('Client disconnected');
   });
 
 });
-
-function sendJson(ws, data){
-  ws.send(JSON.stringify(data));
-}
-
 
 console.log('Login server (ls) is running on port', port);

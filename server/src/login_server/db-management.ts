@@ -1,8 +1,7 @@
 'use strict';
 
-import { LoggedInUser } from "./model";
-import { RegisteredUser } from "./model";
-import { Room } from "./model";
+import { LoggedInUser } from "../model";
+import { RegisteredUser } from "../model";
 
 const mysql = require('mysql');
 const q = require('q'); // promise generator
@@ -16,7 +15,7 @@ export class DbManager {
       host: 'localhost',
       user: 'root',
       password: 'Pa123sS!',
-      database: 'mahjongdb'
+      database: 'hackisu'
     });
   }
 
@@ -35,6 +34,29 @@ export class DbManager {
     return this.query("SELECT EXISTS(SELECT 1 FROM registered_users WHERE name ='"+name+"' AND password='"+password+"');").then((result) => {
       // transform the result to true or false
       return result[0][Object.keys(result[0])[0]] == 1;
+    });
+  }
+
+  // check if the user is registered
+  getRegisteredUser(name:string, password:string){
+    return this.query("SELECT * FROM registered_users WHERE name='"+name+"' AND password='"+password+"';").then((result) => {
+      return result[0];
+    });
+  }
+
+  // get patient info
+  // this should be called only after the login is successful
+  getPatientInfo(name:string){
+    return this.query("SELECT * FROM patient_info WHERE name='"+name+"';").then((result) => {
+      return result[0];
+    });
+  }
+
+  // get doctor info
+  // this should be called only after the login is successful
+  getDrInfo(name:string){
+    return this.query("SELECT * FROM dr_info WHERE name='"+name+"';").then((result) => {
+      return result[0];
     });
   }
 
@@ -59,13 +81,14 @@ export class DbManager {
 var dbManager = new DbManager();
 
 // Manages users, works for login/signup
-export class UserManager {
+export class LoggedInUserManager {
   loggedInUsers: LoggedInUser[];
   forbiddenNameRegex: any;
   forbiddenPassRegex: any;
 
   constructor() {
     this.loggedInUsers = [];
+   
     this.forbiddenNameRegex = /\s/;
     this.forbiddenPassRegex = /\s/;
   }
@@ -137,12 +160,13 @@ export class UserManager {
     dbManager.checkRegisteredUser(name, password).then((result) => {
       if(result){ // user registered
         let token = this.makeToken();
-        let user = new LoggedInUser(token, name);
+        let user = new LoggedInUser(name, token);
+        
         this.loggedInUsers.push(user);
         deferred.resolve({
           action: 'login', 
           status: 'ok', 
-          user_name: name,
+          username: name,
           token: token
         });
       } else { // user not registered
@@ -164,7 +188,7 @@ export class UserManager {
   }
 
   // check if a given user already logged in
-  checkLoggedInUser(name: string){
+  checkLoggedInUser(name: string): boolean {
     for(let i = 0; i < this.loggedInUsers.length; i++){
       if(this.loggedInUsers[i].name == name){
         return true;
