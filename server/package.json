@@ -4,11 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/game_server/ & node dist/login_server/",
-    "start-login-server": "node dist/login_server/",
-    "start-game-server": "node dist/game_server/",
-    "start-ls": "node dist/login_server/",
-    "start-gs": "node dist/game_server/",
+    "start": "node dist/test-server",
     "build": "tsc",
     "watch-tsc": "tsc --watch",
     "watch-start": "tsc --watch & nodemon dist/test-server.js",
