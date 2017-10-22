@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+const WebSocket = require("ws");
 // send data to specific client
 function sendJson(ws, data) {
     ws.send(JSON.stringify(data));
@@ -17,10 +18,6 @@ exports.broadcast = broadcast;
 function tryParseJson(jsonString) {
     try {
         var o = JSON.parse(jsonString);
-        // Handle non-exception-throwing cases:
-        // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-        // but... JSON.parse(null) returns null, and typeof null === "object", 
-        // so we must check for that, too. Thankfully, null is falsey, so this suffices:
         if (o && typeof o === "object") {
             return o;
         }
@@ -45,4 +42,15 @@ function waitForConnection(socket, callback) {
     }, 100); // wait 100 milisecond for the connection...
 }
 exports.waitForConnection = waitForConnection;
+function tryConnect(socket, addr, callback) {
+    setTimeout(function () {
+        socket = new WebSocket(addr);
+        socket.onerror = function (event) {
+            console.log('Server is down');
+            process.exit(); // end server
+        };
+        waitForConnection(socket, callback);
+    }, 200);
+}
+exports.tryConnect = tryConnect;
 //# sourceMappingURL=basic.js.map
