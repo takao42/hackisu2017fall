@@ -13,6 +13,7 @@ server.on('connection', (ws) => {
     // message recieved from client
     ws.on('message', (message) => {
         var data = basic_1.tryParseJson(message);
+        console.log(data);
         if (data == null) {
             return;
         }
@@ -21,13 +22,11 @@ server.on('connection', (ws) => {
         }
         if (data.action == "register hardware") {
             if (data.token == "afafafafafa8") {
-                console.log("hardware registered");
                 ws_hardware = ws;
             }
         }
-        if (data.action == "hardware touched") {
+        else if (data.action == "hardware touched") {
             if (data.token == "afafafafafa8") {
-                console.log("hardware touched");
                 count += 1;
                 basic_1.broadcast(server, {
                     action: 'touched',
@@ -35,18 +34,37 @@ server.on('connection', (ws) => {
                 });
             }
         }
-        if (data.action == "add task") {
-            basic_1.sendJson(ws_hardware, {
-                action: "add task"
-            });
+        else if (data.action == "add task") {
+            if (data.token == "webui") {
+                basic_1.sendJson(ws_hardware, {
+                    action: "add task"
+                });
+                basic_1.broadcast(server, {
+                    action: 'task added',
+                    count: count + 1
+                });
+            }
         }
-        if (data.action == "pill taken") {
+        else if (data.action == "cancel task") {
+            if (data.token == "webui") {
+                basic_1.sendJson(ws_hardware, {
+                    action: "cancel task"
+                });
+            }
+        }
+        else if (data.action == "pill taken") {
             if (data.token == "afafafafafa8") {
-                console.log("pill taken");
                 count += 1;
                 basic_1.broadcast(server, {
-                    action: 'taken',
+                    action: 'pill taken',
                     count: count
+                });
+            }
+        }
+        else if (data.action == "task cancelled") {
+            if (data.token == "afafafafafa8") {
+                basic_1.broadcast(server, {
+                    action: 'task cancelled'
                 });
             }
         }

@@ -21,13 +21,25 @@ export class DoctorUiComponent implements OnInit {
     this.socket.onmessage = function (message) {
       console.log(message.data);
       let data = JSON.parse(message.data);
+
+      if(data.action == "task added"){
+        that.snackBar.open(data.count+"th task added" , "ok", {
+          duration: 2000,
+        });
+      }
       
-      console.log(that)
-      that.snackBar.open("pill taken "+data.count+" times", "done", {
-        duration: 2000,
-      });
-
-
+      if(data.action == "pill taken"){
+        that.snackBar.open("pill taken "+data.count+" times" , "ok", {
+          duration: 3000,
+        });
+      }
+      
+      if(data.action == "task cancelled"){
+        that.snackBar.open("task cancelled" , "ok", {
+          duration: 3000,
+        });
+      }
+      
     };
   }
 
@@ -35,6 +47,14 @@ export class DoctorUiComponent implements OnInit {
     console.log('send take pill');
     this.socket.send(JSON.stringify({
       action: "add task",
+      token: "webui"
+    }));
+  }
+
+  cancel(){
+    console.log('send cancel task');
+    this.socket.send(JSON.stringify({
+      action: "cancel task",
       token: "webui"
     }));
   }
