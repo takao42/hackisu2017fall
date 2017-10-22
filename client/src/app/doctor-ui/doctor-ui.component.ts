@@ -14,6 +14,7 @@ export class DoctorUiComponent implements OnInit {
   selectedPatient:string = "patient1";
   selectedTask:string = "take-pill";
   version = '1.0.0';
+  title = "Care Taker";
 
   patients = [
     {value: 'patient1', viewValue: 'Aayush'},
