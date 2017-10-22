@@ -1,31 +1,64 @@
-<mat-tab-group>
-  <mat-tab label="Login">
+<!-- Demo -->
+<div class="flex-container" 
+     fxLayout="row" 
+     fxLayout.xs="column"
+     fxLayoutAlign="center center"
+     fxLayoutAlign.xs="start">
+  <div class="flex-item" fxFlex="20%" fxFlex.xs="40%">  <h1 style="text-align: left; font-family:Arial"> CARE Taker </h1></div>
 
-  	<div class="example-container">
-	  <mat-form-field>
-	    <input matInput placeholder="user name">
-	  </mat-form-field>
+</div>
 
-	  <mat-form-field>
-	    <input matInput placeholder="password">
-	  </mat-form-field>
+<!-- Header 
+<div class="containerX">
+      <div fxLayout="row wrap" class="colored box nopad" >
+  
+        <div fxFlex >
+        <h1 style="text-align: left; font-family:Arial"> CARE Taker </h1>
+        </div>
+        <div fxFlex="grow">    			
+        	
+ 		</div>
+   </div>          
+</div> -->
+<!-- Body -->
+<div class="containerX">
+      <div fxLayout="row wrap" class="colored box nopad" >
+  
+        <div fxFlex></div>
+        <div fxFlex="grow">    			
+        	<mat-tab-group>
+  				<mat-tab label="Login">
 
-	  <button mat-raised-button color="primary">Login</button>
-	</div>
+  					<div class="example-container">
+	 					 <mat-form-field>
+	 					   <input matInput placeholder="user name">
+						 </mat-form-field>
 
-  </mat-tab>
-  <mat-tab label="Signup">
-	<div class="example-container">
-	  <mat-form-field>
-	    <input matInput placeholder="user name">
-	  </mat-form-field>
+	 				 <mat-form-field>
+	  					  <input matInput placeholder="password">
+					  </mat-form-field>
 
-	  <mat-form-field>
-	    <input matInput placeholder="password">
-	  </mat-form-field>
+	 				<button mat-raised-button color="primary">Login</button>
+					</div>
 
-	  <button mat-raised-button color="primary">Signup</button>
-	</div>
-  </mat-tab>
-</mat-tab-group>
+ 				 </mat-tab>
+ 				 	<mat-tab label="Signup">
+					<div class="example-container">
+	  				<mat-form-field>
+	    			<input matInput placeholder="user name">
+	  				</mat-form-field>
+
+				  <mat-form-field>
+	  			  <input matInput placeholder="password">
+	 			 </mat-form-field>
+	 			 <button mat-raised-button color="primary">SignUp</button>
+					</div>
+ 				 </mat-tab>
+			</mat-tab-group>   
+ 		</div>
+   </div>          
+</div>
+
+
+
 
