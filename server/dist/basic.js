@@ -1,18 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const WebSocket = require("ws");
-const model_1 = require("./model");
-exports.testLoggedInUsers = [
-    new model_1.LoggedInUser('user11', 'token1'),
-    new model_1.LoggedInUser('user12', 'token2'),
-    new model_1.LoggedInUser('user13', 'token3'),
-    new model_1.LoggedInUser('user14', 'token4'),
-    new model_1.LoggedInUser('user15', 'token5'),
-    new model_1.LoggedInUser('user16', 'token6'),
-    new model_1.LoggedInUser('user17', 'token7'),
-    new model_1.LoggedInUser('user18', 'token8'),
-    new model_1.LoggedInUser('user19', 'token8'),
-];
 // send data to specific client
 function sendJson(ws, data) {
     ws.send(JSON.stringify(data));
@@ -30,10 +18,6 @@ exports.broadcast = broadcast;
 function tryParseJson(jsonString) {
     try {
         var o = JSON.parse(jsonString);
-        // Handle non-exception-throwing cases:
-        // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-        // but... JSON.parse(null) returns null, and typeof null === "object", 
-        // so we must check for that, too. Thankfully, null is falsey, so this suffices:
         if (o && typeof o === "object") {
             return o;
         }

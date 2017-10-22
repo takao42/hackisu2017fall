@@ -38,11 +38,13 @@ import {
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { DoctorUiComponent } from './doctor-ui/doctor-ui.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    DoctorUiComponent
   ],
   imports: [
     BrowserModule,
