@@ -1,2 +1,21 @@
-<button mat-raised-button color="primary" (click)="open()">Take pill</button>
+<div class="center">
+<h1>Care Taker</h1>
+<br><br>
+<mat-form-field>
+  <mat-select placeholder="Patient" [(ngModel)]="selectedPatient">
+    <mat-option *ngFor="let patient of patients" [value]="patient.value">
+      {{ patient.viewValue }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-select placeholder="Task option" [(ngModel)]="selectedTask">
+    <mat-option *ngFor="let task of tasks" [value]="task.value">
+      {{ task.viewValue }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<br>
+<button mat-raised-button color="primary" (click)="open()">Add task</button>
 <button mat-raised-button color="primary" (click)="cancel()">Cancel</button>
+</div>

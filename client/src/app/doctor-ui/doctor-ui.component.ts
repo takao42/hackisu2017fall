@@ -11,6 +11,21 @@ export class DoctorUiComponent implements OnInit {
   socket:any;
   touched:boolean = false;
 
+  selectedPatient:string = "patient1";
+  selectedTask:string = "take-pill";
+  version = '1.0.0';
+
+  patients = [
+    {value: 'patient1', viewValue: 'Aayush'},
+    {value: 'patient2', viewValue: 'Takao'},
+    {value: 'patient3', viewValue: 'Raed'}
+  ]
+  tasks = [
+    {value: 'take-pill', viewValue: 'Take pill'},
+    {value: 'exe', viewValue: 'Workout'},
+    {value: 'eat-food', viewValue: 'Eat food'}
+  ];
+
   constructor(public snackBar: MatSnackBar) { }
 
   ngOnInit() {
