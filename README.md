@@ -1,4 +1,4 @@
-# hackisu 2017 fall
+# [hackisu 2017 fall](https://devpost.com/software/care-taker-yumh2p)
 
 We thought about making something that would influence the community and we were looking to particularly focus on health. Imagine a patient with a forgetful memory ,they might have to take some certain pills. This project Makes sure that they do that and that the doctor knows and tells them to take it.
 
@@ -11,3 +11,4 @@ Surprisingly, There is not enough material on actually using the groove led with
 We came to the hackthon, looking for something to do, we came out with more practical training and knowledge about embedded system and servers. Not to forget the implantation of this project in the actual medical field. I would say that is a lot.
 
 Obviously this being a hackithon, means we can't always do all what we want to do. We want to make users and clients in our server and web apps so that this can be used across different users. Another thing is actually letting the patient know the number of pills he has to take through the led.We would also like to integrate it with more sensors to make it more accurate and use a better smaller micro board.
+
